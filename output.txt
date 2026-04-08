@@ -1,0 +1,3 @@
+Number of interrogative sentences found : 0
+Length of the 2nd interrogative sentence: N/A (less than 2 found)
+Longest sentence (7 characters) : "dsad ad"
