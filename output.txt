@@ -1,2 +1,2 @@
-Number of interrogative sentences found: 2
-Length of the second interrogative sentence: 1 characters
+Number of interrogative sentences found: 1
+Length of the second interrogative sentence: N/A (Less than 2 found)
