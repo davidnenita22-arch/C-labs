@@ -1,0 +1,14 @@
+# Ignore the compiled executables and debug symbols
+StringFinder
+a.out
+*.o
+*.dSYM/
+
+# Ignore IDE specific folders and configuration
+cmake-build-debug/
+.idea/
+.vscode/
+
+
+# Ignore OS metadata
+.DS_Store
