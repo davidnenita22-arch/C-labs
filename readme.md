@@ -29,7 +29,7 @@ The logic is divided into modular functions to ensure code clarity:
 | `writeOutputFile` | Persists the final analysis results into `output.txt`[. |
 
 ## 4. Usage
-1. **Compile**: Use a standard C compiler (e.g., `gcc lab10.c -o StringFinder`).
+1. **Compile**: Use a standard C compiler (e.g., `gcc Lab5.c -o Lab5.c`).
 2. **Input**: Provide the maximum expected string length when prompted.
 3. **Review**: Check the terminal for immediate results or open `output.txt` for the saved report.
 
