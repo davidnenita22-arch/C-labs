@@ -4,61 +4,62 @@
 #include <ctype.h>
 
 void createAndWriteInputFile(const char *filename, const char *str);
-void analyzeSentences(const char *str, int *qCount, int *secondLen, int *longestLen, char *longestSent);
-void displayResults(int qCount, int secondLen, int longestLen, const char *longestSent);
-void writeOutputFile(const char *filename, int qCount, int secondLen, int longestLen, const char *longestSent);
+void analyzeSentences(const char *str, int *qCount, int *secondLen);
+void displayResults(int qCount, int secondLen);
+void writeOutputFile(const char *filename, int qCount, int secondLen);
 
 int main() {
     int length;
-
+    
+    // 1. Get length and dynamically allocate memory (Requirement B from Image 2)
     printf("Enter the maximum length of your input string: ");
     if (scanf("%d", &length) != 1) {
         printf("Invalid input.\n");
         return 1;
     }
+    
+    // Clear the input buffer before reading the string
     while (getchar() != '\n');
 
+    // Allocate memory using malloc
     char *inputString = (char *)malloc((length + 1) * sizeof(char));
     if (inputString == NULL) {
         printf("Memory allocation failed!\n");
         return 1;
     }
 
-    // Also allocate a buffer to store the longest sentence (same max size)
-    char *longestSentence = (char *)malloc((length + 1) * sizeof(char));
-    if (longestSentence == NULL) {
-        printf("Memory allocation failed!\n");
-        free(inputString);
-        return 1;
-    }
-    longestSentence[0] = '\0';
-
+    // 2. Allow input of a string from the keyboard
     printf("Enter the string: ");
     fgets(inputString, length + 1, stdin);
+    
+    // Strip the trailing newline character left by fgets
     inputString[strcspn(inputString, "\n")] = '\0';
 
+    // 3. Create input.txt and store the string
     createAndWriteInputFile("input.txt", inputString);
 
-    int interrogativeCount  = 0;
+    // Variables to hold our target data
+    int interrogativeCount = 0;
     int secondSentenceLength = 0;
-    int longestLength        = 0;
 
-    analyzeSentences(inputString, &interrogativeCount, &secondSentenceLength,
-                     &longestLength, longestSentence);
+    // 4. Call our functions to process data using pointers
+    analyzeSentences(inputString, &interrogativeCount, &secondSentenceLength);
+    
+    // 5. Display results to screen
+    displayResults(interrogativeCount, secondSentenceLength);
 
-    displayResults(interrogativeCount, secondSentenceLength,
-                   longestLength, longestSentence);
+    // 6. Write results to output.txt
+    writeOutputFile("output.txt", interrogativeCount, secondSentenceLength);
 
-    writeOutputFile("output.txt", interrogativeCount, secondSentenceLength,
-                    longestLength, longestSentence);
-
+    // Free dynamically allocated memory
     free(inputString);
-    free(longestSentence);
-    printf("\nProcess completed. Check input.txt and output.txt\n");
+    printf("\n[Process completed. Check input.txt and output.txt]\n");
 
     return 0;
 }
 
+
+/* Creates 'input.txt' and writes the keyboard-entered string to it */
 void createAndWriteInputFile(const char *filename, const char *str) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
@@ -69,20 +70,20 @@ void createAndWriteInputFile(const char *filename, const char *str) {
     fclose(file);
 }
 
-void analyzeSentences(const char *str, int *qCount, int *secondLen,
-                      int *longestLen, char *longestSent) {
+/* * Analyzes the string using pointer arithmetic (Requirement A).
+ * Identifies interrogative sentences and calculates the length of the 2nd one.
+ * Time Complexity: O(N) single-pass traversal.
+ */
+void analyzeSentences(const char *str, int *qCount, int *secondLen) {
     *qCount = 0;
     *secondLen = 0;
-    *longestLen = 0;
-
-    int currentLen  = 0;
-    const char *ptr = str;
-    const char *sentStart = str;   /* pointer to start of current sentence */
+    
+    int currentLen = 0;
+    const char *ptr = str; // Pointer to traverse the string
 
     while (*ptr != '\0') {
-        // Skip leading whitespace, also advance sentStart
+        // Skip leading whitespace for accurate sentence length calculation
         if (currentLen == 0 && isspace(*ptr)) {
-            sentStart = ptr + 1;
             ptr++;
             continue;
         }
@@ -90,86 +91,47 @@ void analyzeSentences(const char *str, int *qCount, int *secondLen,
         currentLen++;
 
         if (*ptr == '?') {
+            // Found an interrogative sentence
             (*qCount)++;
             if (*qCount == 2) {
-                *secondLen = currentLen;
+                *secondLen = currentLen; // Store length of the 2nd one
             }
-
-            // Check if this is the longest sentence so far
-            if (currentLen > *longestLen) {
-                *longestLen = currentLen;
-                // Copy sentence text (from sentStart, currentLen characters)
-                strncpy(longestSent, sentStart, currentLen);
-                longestSent[currentLen] = '\0';
-            }
-
+            currentLen = 0; // Reset length counter for the next sentence
+        } 
+        else if (*ptr == '.' || *ptr == '!') {
+            // Found a regular or exclamatory sentence, just reset length
             currentLen = 0;
-            sentStart  = ptr + 1;
-
-        } else if (*ptr == '.' || *ptr == '!') {
-            // Peek ahead past consecutive '.' or '!' to check for '?'
-            const char *peek = ptr + 1;
-            while (*peek == '.' || *peek == '!') {
-                peek++;
-            }
-
-            if (*peek == '?') {
-                // Do NOT reset — let the '?' handler finish this sentence
-            } else {
-                // End of a non-interrogative sentence
-                if (currentLen > *longestLen) {
-                    *longestLen = currentLen;
-                    strncpy(longestSent, sentStart, currentLen);
-                    longestSent[currentLen] = '\0';
-                }
-                currentLen = 0;
-                sentStart = ptr + 1;
-            }
         }
-
         ptr++;
     }
-
-    // Handle any trailing text without a terminating punctuation
-    if (currentLen > 0 && currentLen > *longestLen) {
-        *longestLen = currentLen;
-        strncpy(longestSent, sentStart, currentLen);
-        longestSent[currentLen] = '\0';
-    }
 }
 
-void displayResults(int qCount, int secondLen,
-                    int longestLen, const char *longestSent) {
-    printf("\nOutput Information\n");
-    printf("Number of interrogative sentences found : %d\n", qCount);
-
+/* Displays the extracted data to the screen */
+void displayResults(int qCount, int secondLen) {
+    printf("\n--- Output Information ---\n");
+    printf("Number of interrogative sentences found: %d\n", qCount);
+    
     if (qCount >= 2) {
-        printf("Length of the 2nd interrogative sentence: %d characters\n", secondLen);
-
+        printf("Length of the second interrogative sentence: %d characters\n", secondLen);
     } else {
-        printf("Length of the 2nd interrogative sentence: N/A (less than 2 found)\n");
+        printf("Length of the second interrogative sentence: N/A (Less than 2 found)\n");
     }
-
-    printf("Longest sentence (%d characters) : \"%s\"\n", longestLen, longestSent);
 }
 
-void writeOutputFile(const char *filename, int qCount, int secondLen,
-                     int longestLen, const char *longestSent) {
+/* Writes the identical displayed data to output.txt */
+void writeOutputFile(const char *filename, int qCount, int secondLen) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         perror("Error creating output file");
         exit(EXIT_FAILURE);
     }
-
-    fprintf(file, "Number of interrogative sentences found : %d\n", qCount);
-
+    
+    fprintf(file, "Number of interrogative sentences found: %d\n", qCount);
     if (qCount >= 2) {
-        fprintf(file, "Length of the 2nd interrogative sentence: %d characters\n", secondLen);
+        fprintf(file, "Length of the second interrogative sentence: %d characters\n", secondLen);
     } else {
-        fprintf(file, "Length of the 2nd interrogative sentence: N/A (less than 2 found)\n");
+        fprintf(file, "Length of the second interrogative sentence: N/A (Less than 2 found)\n");
     }
-
-    fprintf(file, "Longest sentence (%d characters) : \"%s\"\n", longestLen, longestSent);
-
+    
     fclose(file);
 }
