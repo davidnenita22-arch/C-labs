@@ -1,0 +1,3 @@
+Number of interrogative sentences found : 2
+Length of the 2nd interrogative sentence: 17 characters
+Longest sentence (17 characters) : "Is it time to go?"
