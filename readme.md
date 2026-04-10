@@ -1,37 +1,40 @@
-# String Analysis and Sentence Processing
+# Pawn Shop Registry Management System
 
-This program was developed as **Laboratory Work No. 3** for the **Data Structures and Algorithms**. It demonstrates a procedural approach to string manipulation in C, focusing on **dynamic memory management** and **pointer-based traversal**.
+This program was developed as **Laboratory Work No. 5** (Part 2) for the **Data Structures and Algorithms** course. It demonstrates an advanced procedural approach to data management in C, focusing on **dynamic memory allocation**, **pointer-based traversal**, and **persistent file I/O**.
 
 ---
 
 ## 1. Project Purpose
-The primary goal is to analyze a user-provided string to extract specific linguistic metrics while maintaining high memory efficiency. The program is designed to:
-* Create and populate a text file (`input.txt`) with keyboard-entered data.
-* Count the total number of **interrogative sentences** (ending with `?`).
-* Determine the character length of the **second interrogative sentence**.
-* Identify the **longest sentence** (by character count) in the entire string.
-* Export all findings to both the terminal and an `output.txt` file.
+The primary goal is to manage a registry of pledged objects while calculating retention periods and performing data sorting. The program is designed to:
+* Dynamically allocate memory for a specific number of pawn records (`malloc`).
+* Store raw customer and object data in a working file (`experiment.txt`).
+* Calculate the duration an object has been in pawn (Years and Months) relative to the **current system date**.
+* Implement a sorting algorithm to organize records in **descending order** based on duration.
+* Export analyzed results to `output1.txt` and append them to the primary registry for history tracking.
 
 ## 2. Technical Implementation
-* **Memory Management**: Uses `malloc()` to dynamically allocate buffers based on a user-specified maximum length, ensuring no memory is wasted on small inputs.
-* **Pointer Arithmetic**: Traversal and analysis are performed entirely via pointers rather than array indexing.
-* **Complexity**: The algorithm achieves $O(N)$ complexity by processing the string in a single pass.
-* **Robustness**: Includes a "peek-ahead" mechanism to handle compound punctuation like `!?` correctly.
+* **Memory Management**: Uses `malloc()` to allocate a block of memory specifically for the requested number of `PawnRecord` structures, followed by `free()` to prevent memory leaks.
+* **Pointer Arithmetic**: Navigates through the dynamic array using pointer offsets `(records + i)` and accesses member fields via the arrow operator (`->`).
+* **Advanced Sorting**: Utilizes the standard library `qsort` for high-efficiency $O(N \log N)$ sorting based on total months calculated.
+* **Time Integration**: Uses `<time.h>` to fetch the real-world date, ensuring calculations remain accurate regardless of when the program is run.
 
 ## 3. Function Overview
-The logic is divided into modular functions to ensure code clarity:
+The logic is divided into modular functions to ensure code clarity and procedural compliance:
 
 | Function | Description |
 | :--- | :--- |
-| `createAndWriteInputFile` | Handles the creation of `input.txt` and writes the raw input string to it. |
-| `analyzeSentences` | The core logic that calculates counts, lengths, and identifies the longest sentence. |
-| `displayResults` | Formats and outputs the calculated data to the user console. |
-| `writeOutputFile` | Persists the final analysis results into `output.txt`[. |
+| `inputRecords` | Collects customer and object data from the keyboard using pointers. |
+| `saveToExperimentFile` | Writes the initial raw data into `experiment.txt`. |
+| `calculateDurations` | Computes the time elapsed since the contract date using system time. |
+| `sortRecordsDescending` | Sorts the registry using a custom comparator function for `qsort`. |
+| `appendFileToFile` | Merges the analyzed report from `output1.txt` into the end of `experiment.txt`. |
+| `testReadMode` | Verifies that all files were correctly closed and are available for reading. |
 
 ## 4. Usage
-1. **Compile**: Use a standard C compiler (e.g., `gcc Lab5.c -o Lab5.c`).
-2. **Input**: Provide the maximum expected string length when prompted.
-3. **Review**: Check the terminal for immediate results or open `output.txt` for the saved report.
+1. **Compile**: Use a standard C compiler (e.g., `gcc Lab5_part2.c -o Lab5_part2`).
+2. **Input**: Enter the total number of records you wish to process.
+3. **Analyze**: Provide the name, object details, and dates (Contract/Maturity).
+4. **Review**: Examine `experiment.txt` for the combined log or `output1.txt` for the sorted duration report.
 
 ---
 
@@ -39,4 +42,4 @@ The logic is divided into modular functions to ensure code clarity:
 * **Student**: Neniţa David, Group FAF-252.
 * **Institution**: Technical University of Moldova, Faculty of Computers, Informatics and Microelectronics.
 * **Supervisor**: Burlacu Natalia, PhD.
-* **Date**: 2026.
+* **Date**: April 2026.
