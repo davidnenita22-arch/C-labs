@@ -3,7 +3,8 @@ StringFinder
 a.out
 *.o
 *.dSYM/
-
+*Lab5*
+*Lab5_part2*
 # Ignore IDE specific folders and configuration
 cmake-build-debug/
 .idea/
