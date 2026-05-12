@@ -31,7 +31,7 @@ The logic is divided into modular functions to ensure code clarity and procedura
 | `testReadMode` | Verifies that all files were correctly closed and are available for reading. |
 
 ## 4. Usage
-1. **Compile**: Use a standard C compiler (e.g., `gcc Lab5_part2.c -o Lab5_part2`).
+1. **Compile**: Use a standard C compiler (e.g., `gcc Lab5_part2.c -o Lab5_part2.c`).
 2. **Input**: Enter the total number of records you wish to process.
 3. **Analyze**: Provide the name, object details, and dates (Contract/Maturity).
 4. **Review**: Examine `experiment.txt` for the combined log or `output1.txt` for the sorted duration report.

@@ -1,3 +1,4 @@
  DURATION RESULTS (SORTED DESCENDING) 
-Object: Samsung Galaxy | Client: Maria Ciobanu | Time in Pawn: 4 Years and 5 Months
-Object: Golden Ring | Client: Ion Popescu | Time in Pawn: 3 Years and 3 Months
+Object: Inel de Aur | Client: Maria Popescu | Time in Pawn: 2 Years and 0 Months
+Object: Laptop | Client: Ana Ionescu | Time in Pawn: 1 Years and 6 Months
+Object: Ceas | Client: Anghel Daniel | Time in Pawn: 0 Years and 1 Months

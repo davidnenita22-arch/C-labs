@@ -1,8 +1,10 @@
  RAW PAWN SHOP REGISTRY 
-Customer: Ion Popescu | Object: Golden Ring | Value: 3500.00 MDL | Contract: 15/01/2023 | Maturity: 15/07/2023
-Customer: Maria Ciobanu | Object: Samsung Galaxy | Value: 8000.00 MDL | Contract: 10/11/2021 | Maturity: 10/05/2022
+Customer: Maria Popescu | Object: Inel de Aur | Value: 1500.50 MDL | Contract: 10/10/2006 | Maturity: 10/10/2008
+Customer: Anghel Daniel | Object: Ceas | Value: 2000.00 MDL | Contract: 14/12/2025 | Maturity: 15/01/2026
+Customer: Ana Ionescu | Object: Laptop | Value: 3200.00 MDL | Contract: 01/03/2024 | Maturity: 01/09/2025
 
  APPENDED FROM output1.txt 
  DURATION RESULTS (SORTED DESCENDING) 
-Object: Samsung Galaxy | Client: Maria Ciobanu | Time in Pawn: 4 Years and 5 Months
-Object: Golden Ring | Client: Ion Popescu | Time in Pawn: 3 Years and 3 Months
+Object: Inel de Aur | Client: Maria Popescu | Time in Pawn: 2 Years and 0 Months
+Object: Laptop | Client: Ana Ionescu | Time in Pawn: 1 Years and 6 Months
+Object: Ceas | Client: Anghel Daniel | Time in Pawn: 0 Years and 1 Months

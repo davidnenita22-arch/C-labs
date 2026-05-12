@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 typedef struct {
     int day;
@@ -59,7 +58,6 @@ int main() {
     saveToExperimentFile(registry, recordCount, expFile);
 
     // Display the data recently entered in the given file
-    printf("\n Data successfully written. Reading from %s \n", expFile);
     displayFromFile(expFile);
 
     // Calculate duration of the object being in pawn
@@ -68,18 +66,15 @@ int main() {
     // Sort and enter results into output.txt
     sortRecordsDescending(registry, recordCount);
     saveToOutputFile(registry, recordCount, outFile);
-    printf("\n Calculated durations sorted descending and saved to %s \n", outFile);
 
     // Copy entire data from output.txt to the end of experiment.txt
     appendFileToFile(outFile, expFile);
-    printf("Data from %s successfully appended to %s \n", outFile, expFile);
 
     // Test opening both files in read mode
     testReadMode(expFile, outFile);
 
     // Free allocated memory
     free(registry);
-    printf("\nProgram executed successfully. Memory freed.\n");
 
     return 0;
 }
@@ -152,25 +147,22 @@ void displayFromFile(const char* filename) {
 }
 
 void calculateDurations(PawnRecord* records, int count) {
-    // Get current date
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    int currentYear = tm.tm_year + 1900;
-    int currentMonth = tm.tm_mon + 1;
-
     for (int i = 0; i < count; i++) {
         PawnRecord* r = (records + i);
-        
-        // Calculate total months difference
-        int monthsPassed = (currentYear - r->contractDate.year) * 12 + (currentMonth - r->contractDate.month);
-        
-        if (monthsPassed < 0) {
-            monthsPassed = 0; // Prevent negative durations if contract is somehow in the future
+        Date* c = &r->contractDate;
+        Date* m = &r->maturityDate;
+
+        /* Pawn term for this record only: from contract date to maturity date */
+        int monthsInPawn =
+            (m->year - c->year) * 12 + (m->month - c->month);
+
+        if (monthsInPawn < 0) {
+            monthsInPawn = 0;
         }
 
-        r->totalDurationInMonths = monthsPassed;
-        r->durationYears = monthsPassed / 12;
-        r->durationMonths = monthsPassed % 12;
+        r->totalDurationInMonths = monthsInPawn;
+        r->durationYears = monthsInPawn / 12;
+        r->durationMonths = monthsInPawn % 12;
     }
 }
 
@@ -192,7 +184,7 @@ void saveToOutputFile(PawnRecord* records, int count, const char* filename) {
         return;
     }
 
-    fprintf(file, " DURATION RESULTS (SORTED DESCENDING) \n");
+    fprintf(file, " DURATION RESULTS \n");
     for (int i = 0; i < count; i++) {
         PawnRecord* r = (records + i);
         fprintf(file, "Object: %s | Client: %s %s | Time in Pawn: %d Years and %d Months\n",
@@ -212,7 +204,6 @@ void appendFileToFile(const char* sourceFilename, const char* destFilename) {
         return;
     }
 
-    fprintf(destFile, "\n APPENDED FROM %s \n", sourceFilename);
     char ch;
     while ((ch = fgetc(srcFile)) != EOF) {
         fputc(ch, destFile);
@@ -228,16 +219,16 @@ void testReadMode(const char* filename1, const char* filename2) {
     FILE* f2 = fopen(filename2, "r");
 
     if (f1 != NULL) {
-        printf("[OK] %s can be opened in read mode.\n", filename1);
+        printf("%s can be opened in read mode.\n", filename1);
         fclose(f1);
     } else {
-        printf("[FAIL] Could not open %s in read mode.\n", filename1);
+        printf("Could not open %s in read mode.\n", filename1);
     }
 
     if (f2 != NULL) {
-        printf("[OK] %s can be opened in read mode.\n", filename2);
+        printf("%s can be opened in read mode.\n", filename2);
         fclose(f2);
     } else {
-        printf("[FAIL] Could not open %s in read mode.\n", filename2);
+        printf("Could not open %s in read mode.\n", filename2);
     }
 }
